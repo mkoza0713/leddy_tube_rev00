@@ -1,7 +1,7 @@
 #include "RTClib.h"
 RTC_DS1307 rtc;
-byte nowHour;
-byte nowMinute;
+int nowHour;
+int nowMinute;
 
 byte lockRtc = 1;
 byte lightModeHour = 0;  //tryb pracy wysyalny do funkcji
@@ -12,6 +12,7 @@ byte lockModeStage = 0;  //żeby nie zmieniać bez potrzeby stanu cały czas
 
 void setup() {
   Serial.begin(9600);
+  Serial.println("START SYSTEMU");
 
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -47,11 +48,11 @@ void loop() {
     }
   }
 
-  nowHour = now.hour();
-  nowMinute = now.minute();
-  Serial.print(now.hour());
+  nowHour = int(now.hour());
+  nowMinute = int(now.minute());
+  Serial.print(nowHour);
   Serial.print(':');
-  Serial.print(now.minute());
+  Serial.print(nowMinute);
   Serial.print(':');
   Serial.print(now.second());
   Serial.print("   RTC:");
@@ -82,16 +83,30 @@ void hourStage() {
   byte nightStopH = 19;
   byte nightStopM = 50;
 
-
-  if (nowHour >= morningStartH && nowMinute >= morningStartM && nowHour <= morningStopH && nowMinute < morningStopM) {
+  if (nowHour >= morningStartH && nowHour < morningStopH ) {
     lightModeHour = 1;
-  } else if (nowHour >= afternoonStartH && nowMinute >= afternoonStartM && nowHour <= afternoonStoptH && nowMinute < afternoonStoptM) {
+  } else if (nowHour >= afternoonStartH && nowHour < afternoonStoptH ) {
     lightModeHour = 2;
-  } else if (nowHour >= eveningStartH && nowMinute >= eveningStartM && nowHour <= eveningStopH && nowMinute < eveningStopM) {
+  } else if (nowHour >= eveningStartH && nowHour < eveningStopH ) {
     lightModeHour = 3;
-  } else if (nowHour >= nightStartH && nowMinute >= nightStartM && nowHour <= nightStopH && nowMinute < nightStopM) {
+  } else if (nowHour >= nightStartH && nowHour < nightStopH ) {
     lightModeHour = 4;
-  } else lightModeHour = 0;
+  } else {
+    lightModeHour = 0;
+  }
+
+
+  // if (nowHour >= morningStartH && nowMinute >= morningStartM && nowHour <= morningStopH && nowMinute < morningStopM) {
+  //   lightModeHour = 1;
+  // } else if (nowHour >= afternoonStartH && nowMinute >= afternoonStartM && nowHour <= afternoonStoptH && nowMinute < afternoonStoptM) {
+  //   lightModeHour = 2;
+  // } else if (nowHour >= eveningStartH && nowMinute >= eveningStartM && nowHour <= eveningStopH && nowMinute < eveningStopM) {
+  //   lightModeHour = 3;
+  // } else if (nowHour >= nightStartH && nowMinute >= nightStartM && nowHour <= nightStopH && nowMinute < nightStopM) {
+  //   lightModeHour = 4;
+  // } else {
+  //   lightModeHour = 0;
+  // }
 }
 void lightMode(byte mode) {
   digitalWrite(relay1, LOW);
