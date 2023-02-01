@@ -1,7 +1,9 @@
 #include "RTClib.h"
 RTC_DS1307 rtc;
-int nowHour;
-int nowMinute;
+unsigned int nowHour;
+unsigned int nowMinute;
+unsigned int nowSec;
+unsigned long timeNow;
 
 byte lockRtc = 1;
 byte lightModeHour = 0;  //tryb pracy wysyalny do funkcji
@@ -48,65 +50,85 @@ void loop() {
     }
   }
 
-  nowHour = int(now.hour());
-  nowMinute = int(now.minute());
+  nowHour = now.hour();
+  nowMinute = now.minute();
+  nowSec = now.second();
+  
+  timeNow = (nowHour*(long)3600) + (nowMinute*60)+nowSec;  //tyle sekund minelo od polnocy
+  Serial.print("Tyle od polnocy: ");
+  Serial.print(timeNow);
+  Serial.print("  ");
   Serial.print(nowHour);
   Serial.print(':');
   Serial.print(nowMinute);
   Serial.print(':');
-  Serial.print(now.second());
-  Serial.print("   RTC:");
-  Serial.print(lockRtc);
-  Serial.print("   Tryb pracy:");
-  Serial.print(lightModeHour);
-  Serial.print("   lockModeStage:");
-  Serial.println(lockModeStage);
+  Serial.print(nowSec);
+  Serial.print("   lightModeHour: ");
+  Serial.println(lightModeHour);
+
 }
 void hourStage() {
-  byte morningStartH = 7;
-  byte morningStartM = 0;
-  byte morningStopH = 8;
-  byte morningStopM = 0;
+  long startTime1;
+  long startTime2;
+  long startTime3;
+  long startTime4;
+  long stopTime1;
+  long stopTime2;
+  long stopTime3;
+  long stopTime4;
+
+  byte morningStartH = 21;
+  byte morningStartM = 42;
+  byte morningStopH = 21;
+  byte morningStopM = 45;
+  startTime1=morningStartH*(long)3600+morningStartM*60;
+  stopTime1=morningStopH*(long)3600+morningStopM*60;
 
   byte afternoonStartH = 8;
   byte afternoonStartM = 0;
   byte afternoonStoptH = 15;
   byte afternoonStoptM = 0;
+  startTime2=afternoonStartH*(long)3600+afternoonStartM*60;
+  stopTime2=afternoonStoptH*(long)3600+afternoonStoptM*60;
 
   byte eveningStartH = 15;
   byte eveningStartM = 0;
   byte eveningStopH = 17;
   byte eveningStopM = 0;
+  startTime3=eveningStartH*(long)3600+eveningStartM*60;
+  stopTime3=eveningStopH*(long)3600+eveningStopM*60;
 
   byte nightStartH = 17;
   byte nightStartM = 0;
   byte nightStopH = 19;
-  byte nightStopM = 50;
+  byte nightStopM = 0;
+  startTime4=nightStartH*(long)3600+nightStartM*60;
+  stopTime4=nightStopH*(long)3600+nightStopM*60;
 
-  if (nowHour >= morningStartH && nowHour < morningStopH ) {
+  if (timeNow >= startTime1 && timeNow<= stopTime1) {
     lightModeHour = 1;
-  } else if (nowHour >= afternoonStartH && nowHour < afternoonStoptH ) {
+  } else if (timeNow >= startTime2 && timeNow<= stopTime2 ) {
     lightModeHour = 2;
-  } else if (nowHour >= eveningStartH && nowHour < eveningStopH ) {
+  } else if (timeNow >= startTime3 && timeNow<= stopTime3 ) {
     lightModeHour = 3;
-  } else if (nowHour >= nightStartH && nowHour < nightStopH ) {
+  } else if (timeNow >= startTime4 && timeNow<= stopTime4 ) {
     lightModeHour = 4;
   } else {
     lightModeHour = 0;
   }
 
-
-  // if (nowHour >= morningStartH && nowMinute >= morningStartM && nowHour <= morningStopH && nowMinute < morningStopM) {
+  // if (nowHour >= morningStartH && nowHour < morningStopH ) {
   //   lightModeHour = 1;
-  // } else if (nowHour >= afternoonStartH && nowMinute >= afternoonStartM && nowHour <= afternoonStoptH && nowMinute < afternoonStoptM) {
+  // } else if (nowHour >= afternoonStartH && nowHour < afternoonStoptH ) {
   //   lightModeHour = 2;
-  // } else if (nowHour >= eveningStartH && nowMinute >= eveningStartM && nowHour <= eveningStopH && nowMinute < eveningStopM) {
+  // } else if (nowHour >= eveningStartH && nowHour < eveningStopH ) {
   //   lightModeHour = 3;
-  // } else if (nowHour >= nightStartH && nowMinute >= nightStartM && nowHour <= nightStopH && nowMinute < nightStopM) {
+  // } else if (nowHour >= nightStartH && nowHour < nightStopH ) {
   //   lightModeHour = 4;
   // } else {
   //   lightModeHour = 0;
   // }
+
 }
 void lightMode(byte mode) {
   digitalWrite(relay1, LOW);
