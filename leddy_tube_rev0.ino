@@ -77,17 +77,17 @@ void hourStage() {
   long stopTime3;
   long stopTime4;
 
-  byte morningStartH = 21;
-  byte morningStartM = 42;
-  byte morningStopH = 21;
-  byte morningStopM = 49;
+  byte morningStartH = 7;
+  byte morningStartM = 0;
+  byte morningStopH = 8;
+  byte morningStopM = 0;
   startTime1=morningStartH*(long)3600+morningStartM*60;
   stopTime1=morningStopH*(long)3600+morningStopM*60;
 
-  byte afternoonStartH = 21;
-  byte afternoonStartM = 49;
-  byte afternoonStoptH = 21;
-  byte afternoonStoptM = 51;
+  byte afternoonStartH = 8;
+  byte afternoonStartM = 0;
+  byte afternoonStoptH = 15;
+  byte afternoonStoptM = 0;
   startTime2=afternoonStartH*(long)3600+afternoonStartM*60;
   stopTime2=afternoonStoptH*(long)3600+afternoonStoptM*60;
 
@@ -116,18 +116,6 @@ void hourStage() {
   } else {
     lightModeHour = 0;
   }
-
-  // if (nowHour >= morningStartH && nowHour < morningStopH ) {
-  //   lightModeHour = 1;
-  // } else if (nowHour >= afternoonStartH && nowHour < afternoonStoptH ) {
-  //   lightModeHour = 2;
-  // } else if (nowHour >= eveningStartH && nowHour < eveningStopH ) {
-  //   lightModeHour = 3;
-  // } else if (nowHour >= nightStartH && nowHour < nightStopH ) {
-  //   lightModeHour = 4;
-  // } else {
-  //   lightModeHour = 0;
-  // }
 
 }
 void lightMode(byte mode) {
