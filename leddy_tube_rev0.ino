@@ -80,14 +80,14 @@ void hourStage() {
   byte morningStartH = 21;
   byte morningStartM = 42;
   byte morningStopH = 21;
-  byte morningStopM = 45;
+  byte morningStopM = 49;
   startTime1=morningStartH*(long)3600+morningStartM*60;
   stopTime1=morningStopH*(long)3600+morningStopM*60;
 
-  byte afternoonStartH = 8;
-  byte afternoonStartM = 0;
-  byte afternoonStoptH = 15;
-  byte afternoonStoptM = 0;
+  byte afternoonStartH = 21;
+  byte afternoonStartM = 49;
+  byte afternoonStoptH = 21;
+  byte afternoonStoptM = 51;
   startTime2=afternoonStartH*(long)3600+afternoonStartM*60;
   stopTime2=afternoonStoptH*(long)3600+afternoonStoptM*60;
 
